@@ -1,6 +1,6 @@
 import os
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes, filters
 
 # 替换为你的 Telegram Bot Token
 TOKEN = os.getenv('TELEGRAM_BOT_TOKEN')
@@ -25,10 +25,15 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     await update.message.reply_text('请选择一个操作：', reply_markup=reply_markup)
 
 
+async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    await update.message.reply_text("你发送了一条消息！")
+
+
 def main() -> None:
     application = Application.builder().token(TOKEN).build()
 
     application.add_handler(CommandHandler("start", start))
+    application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     # 设置 Webhook
     application.run_webhook(
