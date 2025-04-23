@@ -1,11 +1,8 @@
 {
-  "builds": [
-    {
-      "src": "bot.py",
-      "use": "@railway/python"
+  "build": {
+    "builder": "nixpacks",
+    "config": {
+      "startCommand": "python bot.py"
     }
-  ],
-  "deploy": {
-    "startCommand": "python bot.py"
   }
 }
