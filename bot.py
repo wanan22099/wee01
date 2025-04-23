@@ -10,9 +10,13 @@ from telegram.ext import (
 
 # 环境变量配置
 BOT_TOKEN = os.environ['BOT_TOKEN']
-WEBHOOK_URL = os.environ.get('RAILWAY_STATIC_URL', '') + '/webhook'  # Railway自动提供的域名
 PORT = int(os.environ.get('PORT', 8000))
-
+app.run_webhook(
+    listen="0.0.0.0",
+    port=PORT,
+    webhook_url=f"https://{os.environ['RAILWAY_STATIC_URL']}/webhook",
+    secret_token="YOUR_SECRET_TOKEN"  # 可选，增强安全性
+)
 # 按钮配置
 GROUP_INVITE_HASH = os.environ.get('GROUP_INVITE_HASH', '')
 CHANNEL_USERNAME = os.environ.get('CHANNEL_USERNAME', '')
@@ -80,7 +84,7 @@ def main():
 
     # 注册处理器
     app.add_handler(CommandHandler("start", start))
-    app.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    app.add_handler(MessageHandler(filters.TEXT, handle_message))
     app.add_error_handler(error_handler)
 
     # Webhook配置
